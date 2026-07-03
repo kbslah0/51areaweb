@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Area 51</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <meta name="theme-color" content="#00ff41" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Cairo',sans-serif;
+      background:#07070f; color:#eef3ff;
+      min-height:100vh; direction:rtl;
+    }
+    body.ltr { direction:ltr; }
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-thumb { background:#00cc33; border-radius:2px; }
+
+    .login-page {
+      display:flex; align-items:center; justify-content:center;
+      min-height:100vh; padding:20px;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,255,65,0.04), transparent 60%), #07070f;
+    }
+    .login-box {
+      background:#111128; border:1px solid rgba(0,255,65,0.12);
+      border-radius:16px; padding:40px 32px; width:100%; max-width:380px;
+      text-align:center;
+    }
+    .login-box img { width:80px; margin-bottom:12px; }
+    .login-box h1 { font-family:'Teko',sans-serif; font-size:32px; letter-spacing:3px; }
+    .login-box h1 span { color:#00ff41; }
+    .login-box p { color:#7788bb; font-size:13px; margin-bottom:24px; }
+    .login-box input {
+      width:100%; padding:12px 16px; margin-bottom:12px;
+      background:#0d0d2b; border:1px solid rgba(0,255,65,0.12);
+      border-radius:8px; color:#eef3ff; font-family:'Cairo',sans-serif;
+      font-size:14px; outline:none; transition:0.3s;
+    }
+    .login-box input:focus { border-color:#00ff41; }
+    .login-box button {
+      width:100%; padding:12px; border-radius:50px; border:none;
+      background:#00ff41; color:#05050f; font-weight:700;
+      font-size:15px; cursor:pointer; font-family:'Cairo',sans-serif;
+      transition:0.3s;
+    }
+    .login-box button:hover { box-shadow:0 4px 20px rgba(0,255,65,0.3); }
+    .login-error { color:#ff4444; font-size:13px; margin-top:8px; display:none; }
+
+    .admin-page { display:none; }
+    .admin-header {
+      background:#111128; border-bottom:1px solid rgba(0,255,65,0.1);
+      padding:12px 24px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .admin-header .brand { display:flex; align-items:center; gap:10px; }
+    .admin-header .brand img { width:32px; }
+    .admin-header .brand h2 { font-family:'Teko',sans-serif; font-size:22px; letter-spacing:2px; }
+    .admin-header .brand h2 span { color:#00ff41; }
+    .admin-header .admin-actions { display:flex; gap:8px; align-items:center; }
+    .admin-header .admin-actions span { font-size:13px; color:#7788bb; }
+    .admin-header button {
+      padding:6px 18px; border-radius:20px; border:1px solid rgba(0,255,65,0.2);
+      background:transparent; color:#00ff41; cursor:pointer;
+      font-family:'Cairo',sans-serif; font-size:13px; transition:0.3s;
+    }
+    .admin-header button:hover { background:rgba(0,255,65,0.06); }
+
+    .admin-body { padding:24px; max-width:1200px; margin:0 auto; }
+    .admin-body h2 { font-family:'Teko',sans-serif; font-size:28px; margin-bottom:20px; }
+    .admin-body h2 span { color:#00ff41; }
+
+    .add-form {
+      background:#111128; border:1px solid rgba(0,255,65,0.1);
+      border-radius:12px; padding:24px; margin-bottom:24px;
+    }
+    .add-form h3 { margin-bottom:16px; font-size:16px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+    .add-form input, .add-form textarea, .add-form select {
+      width:100%; padding:10px 14px; margin-bottom:12px;
+      background:#0d0d2b; border:1px solid rgba(0,255,65,0.1);
+      border-radius:8px; color:#eef3ff; font-family:'Cairo',sans-serif;
+      font-size:13px; outline:none; transition:0.3s;
+    }
+    .add-form input:focus, .add-form textarea:focus { border-color:#00ff41; }
+    .add-form textarea { resize:vertical; min-height:60px; }
+    .add-form label { display:block; font-size:12px; color:#7788bb; margin-bottom:4px; }
+    .add-form .full { grid-column:1/-1; }
+    .add-form .btn-add {
+      padding:10px 32px; border-radius:50px; border:none;
+      background:#00ff41; color:#05050f; font-weight:700;
+      font-size:14px; cursor:pointer; font-family:'Cairo',sans-serif;
+      transition:0.3s;
+    }
+    .add-form .btn-add:hover { box-shadow:0 4px 20px rgba(0,255,65,0.3); }
+    .add-form .btn-add:disabled { opacity:0.5; cursor:not-allowed; }
+
+    .sizes-grid { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .sizes-grid label {
+      display:flex; align-items:center; gap:4px;
+      padding:4px 12px; border-radius:6px;
+      background:#0d0d2b; border:1px solid rgba(0,255,65,0.1);
+      cursor:pointer; font-size:13px; transition:0.2s;
+    }
+    .sizes-grid label:hover { border-color:#00ff41; }
+    .sizes-grid input:checked + span { color:#00ff41; }
+
+    .products-table {
+      background:#111128; border:1px solid rgba(0,255,65,0.1);
+      border-radius:12px; overflow:hidden;
+    }
+    .products-table table { width:100%; border-collapse:collapse; }
+    .products-table th {
+      background:#0d0d2b; padding:10px 14px; text-align:right;
+      font-size:12px; color:#7788bb; font-weight:600; border-bottom:1px solid rgba(0,255,65,0.1);
+    }
+    .products-table td {
+      padding:10px 14px; font-size:13px; border-bottom:1px solid rgba(0,255,65,0.05);
+      vertical-align:middle;
+    }
+    .products-table td img { width:40px; height:40px; border-radius:8px; object-fit:cover; }
+    .products-table .del-btn {
+      padding:4px 12px; border-radius:6px; border:none;
+      background:#ff0044; color:white; cursor:pointer; font-size:12px;
+      font-family:'Cairo',sans-serif;
+    }
+    .products-table .del-btn:hover { background:#cc0033; }
+    .empty-msg { text-align:center; padding:40px; color:#7788bb; }
+    .empty-msg i { font-size:48px; display:block; margin-bottom:12px; opacity:0.4; }
+
+    .toast {
+      position:fixed; bottom:20px; right:20px;
+      background:#111128; border:1px solid #00ff41;
+      border-radius:8px; padding:12px 20px; display:flex;
+      align-items:center; gap:10px; z-index:9999;
+      box-shadow:0 8px 30px rgba(0,0,0,0.4);
+      transform:translateY(80px); opacity:0;
+      transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast i { color:#00ff41; }
+    .toast span { font-size:13px; }
+
+    @media(max-width:768px) {
+      .form-row, .form-row-3 { grid-template-columns:1fr; }
+      .admin-body { padding:16px; }
+      .products-table table { font-size:12px; }
+      .products-table td, .products-table th { padding:8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span></span></div>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-page" id="loginPage">
+  <div class="login-box">
+    <img src="assets/logo.png" alt="Area 51" />
+    <h1>AREA <span>51</span></h1>
+    <p>Admin Panel — Shoes From Another Galaxy</p>
+    <input type="text" id="loginUser" placeholder="Username" autocomplete="off" />
+    <input type="password" id="loginPass" placeholder="Password" />
+    <button onclick="handleLogin()">Login</button>
+    <div class="login-error" id="loginError">Wrong credentials</div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-page" id="adminPage">
+  <div class="admin-header">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Area 51" />
+      <h2>AREA <span>51</span> ADMIN</h2>
+    </div>
+    <div class="admin-actions">
+      <span id="adminName">Admin</span>
+      <button onclick="handleLogout()">Logout</button>
+    </div>
+  </div>
+  <div class="admin-body">
+
+    <h2>Add <span>Product</span></h2>
+    <div class="add-form">
+      <div class="form-row">
+        <div>
+          <label>Image URL</label>
+          <input type="text" id="pImage" placeholder="https://example.com/shoe.jpg" />
+        </div>
+        <div>
+          <label>Price ($)</label>
+          <input type="number" id="pPrice" placeholder="129" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Name (English)</label>
+          <input type="text" id="pNameEn" placeholder="Nebula Runner" />
+        </div>
+        <div>
+          <label>Name (Arabic)</label>
+          <input type="text" id="pNameAr" placeholder="Nebula Runner" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Description (English)</label>
+          <textarea id="pDescEn" placeholder="Light-speed with alien propulsion"></textarea>
+        </div>
+        <div>
+          <label>Description (Arabic)</label>
+          <textarea id="pDescAr" placeholder="سرعة الضوء بدفع فضائي"></textarea>
+        </div>
+      </div>
+      <div>
+        <label>Available Sizes</label>
+        <div class="sizes-grid" id="sizesGrid"></div>
+      </div>
+      <button class="btn-add" id="addBtn" onclick="addProduct()">Add Product</button>
+    </div>
+
+    <h2>All <span>Products</span> (<span id="prodCount">0</span>)</h2>
+    <div class="products-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name (EN)</th>
+            <th>Name (AR)</th>
+            <th>Price</th>
+            <th>Sizes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="productsTbody"></tbody>
+      </table>
+      <div class="empty-msg" id="emptyMsg">
+        <i class="fas fa-box-open"></i>
+        No products yet. Add your first shoe above!
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ===== SIZES =====
+const allSizes = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46];
+
+function renderSizes() {
+  const container = document.getElementById('sizesGrid');
+  container.innerHTML = allSizes.map(s => `
+    <label>
+      <input type="checkbox" value="${s}" /> <span>${s}</span>
+    </label>
+  `).join('');
+}
+renderSizes();
+
+// ===== CREDENTIALS =====
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin123';
+
+// ===== LOGIN =====
+function handleLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    localStorage.setItem('a51-admin', 'logged');
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('adminPage').style.display = 'block';
+    document.getElementById('loginError').style.display = 'none';
+    loadProducts();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem('a51-admin');
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('adminPage').style.display = 'none';
+}
+
+// Check login on load
+if (localStorage.getItem('a51-admin') === 'logged') {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('adminPage').style.display = 'block';
+  loadProducts();
+}
+
+// ===== ENTER KEY =====
+document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+
+// ===== PRODUCTS CRUD =====
+function getProducts() {
+  return JSON.parse(localStorage.getItem('a51-products') || '[]');
+}
+
+function saveProducts(products) {
+  localStorage.setItem('a51-products', JSON.stringify(products));
+}
+
+function addProduct() {
+  const image = document.getElementById('pImage').value.trim();
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const nameEn = document.getElementById('pNameEn').value.trim();
+  const nameAr = document.getElementById('pNameAr').value.trim();
+  const descEn = document.getElementById('pDescEn').value.trim();
+  const descAr = document.getElementById('pDescAr').value.trim();
+
+  const sizes = [];
+  document.querySelectorAll('#sizesGrid input:checked').forEach(cb => sizes.push(parseInt(cb.value)));
+
+  if (!image || !price || !nameEn || !nameAr || !descEn || !descAr) {
+    showToast('Please fill all fields', '#ff4444');
+    return;
+  }
+  if (sizes.length === 0) {
+    showToast('Select at least one size', '#ff4444');
+    return;
+  }
+
+  const products = getProducts();
+  products.push({
+    id: Date.now(),
+    image,
+    price,
+    nameEn,
+    nameAr,
+    descEn,
+    descAr,
+    sizes
+  });
+  saveProducts(products);
+  clearForm();
+  loadProducts();
+  showToast('Product added successfully! 🚀');
+}
+
+function deleteProduct(id) {
+  if (!confirm('Delete this product?')) return;
+  let products = getProducts();
+  products = products.filter(p => p.id !== id);
+  saveProducts(products);
+  loadProducts();
+  showToast('Product deleted');
+}
+
+function clearForm() {
+  document.getElementById('pImage').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pNameEn').value = '';
+  document.getElementById('pNameAr').value = '';
+  document.getElementById('pDescEn').value = '';
+  document.getElementById('pDescAr').value = '';
+  document.querySelectorAll('#sizesGrid input').forEach(cb => cb.checked = false);
+}
+
+function loadProducts() {
+  const products = getProducts();
+  const tbody = document.getElementById('productsTbody');
+  const empty = document.getElementById('emptyMsg');
+  const count = document.getElementById('prodCount');
+
+  count.textContent = products.length;
+
+  if (products.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  tbody.innerHTML = products.map(p => {
+    const sizesStr = p.sizes.join(', ');
+    return `
+      <tr>
+        <td><img src="${p.image}" alt="${p.nameEn}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'%3E%3Crect fill=\\'%230d0d2b\\' width=\\'100\\' height=\\'100\\'/%3E%3Ctext x=\\'50\\' y=\\'65\\' text-anchor=\\'middle\\' font-size=\\'40\\'%3E👟%3C/text%3E%3C/svg%3E'" /></td>
+        <td>${p.nameEn}</td>
+        <td>${p.nameAr}</td>
+        <td>$${p.price}</td>
+        <td style="font-size:12px;">${sizesStr}</td>
+        <td><button class="del-btn" onclick="deleteProduct(${p.id})">Delete</button></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ===== TOAST =====
+function showToast(msg, color) {
+  const t = document.getElementById('toast');
+  t.querySelector('span').textContent = msg;
+  t.querySelector('i').style.color = color || '#00ff41';
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+console.log('%c AREA 51 ADMIN ', 'background:#00ff41;color:#05050f;font-size:18px;font-weight:bold;padding:8px 16px;border-radius:6px;font-family:Teko,sans-serif;');
+</script>
+</body>
+</html>

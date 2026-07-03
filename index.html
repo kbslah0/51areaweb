@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Area 51 — Shoes From Another Galaxy</title>
+  <meta name="description" content="Area 51 - متجر أحذية فضائي" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <meta name="theme-color" content="#00ff41" />
+</head>
+<body>
+
+<div class="page-transition" id="pageTransition"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div class="cart-notif" id="cartNotif"><i class="fas fa-check-circle"></i><span></span></div>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <img src="assets/logo.png" alt="Area 51" style="width:80px;display:block;margin:0 auto 12px;animation:loadBounce 0.8s var(--ease) infinite alternate;" />
+    <h2>AREA 51</h2>
+    <p id="loaderText">Loading...</p>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="assets/logo.png" alt="Area 51" class="icon" style="width:28px;height:28px;object-fit:contain;" />
+      AREA <span>51</span>
+    </a>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero" data-i18n="nav_home">Home</a></li>
+      <li><a href="#products" data-i18n="nav_products">Shoes</a></li>
+      <li><a href="#story" data-i18n="nav_story">Story</a></li>
+      <li><a href="/products" data-i18n="nav_store">Store</a></li>
+      <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+      <li><button class="lang-btn" id="langToggle">EN</button></li>
+      <li><button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <img src="assets/logo.png" alt="Area 51" style="width:clamp(100px,20vw,180px);display:block;margin:0 auto 10px;animation:floatY 3s var(--ease) infinite;filter:drop-shadow(0 0 30px var(--primary-glow));" />
+    <h1>AREA <span>51</span></h1>
+    <p class="sub" data-i18n="hero_sub">Shoes From Another Galaxy</p>
+    <p class="desc" data-i18n="hero_desc">Space-grade footwear with alien technology. Walk on the moon — literally.</p>
+    <div class="hero-actions">
+      <a href="/products" class="btn btn-primary"><span data-i18n="hero_btn_buy">Shop Collection</span> <i class="fas fa-arrow-left"></i></a>
+      <a href="#story" class="btn btn-outline"><span data-i18n="hero_btn_story">The Story</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section" id="products">
+  <div class="container">
+    <h2 class="section-title" data-i18n="section_products_title">Galactic <span>Collection</span></h2>
+    <p class="section-sub" data-i18n="section_products_sub">Footwear engineered from alien blueprints</p>
+    <div class="products-grid" id="productsGrid"></div>
+
+    <!-- Cart + Checkout -->
+    <div class="cart-box" id="cartBox">
+      <h2>🛸 <span data-i18n="cart_title">Your Orbit</span></h2>
+      <div id="cartItems"></div>
+      <div class="cart-total" id="cartTotal"><span data-i18n="cart_total">Total</span>: $0</div>
+      <button class="whatsapp-btn" id="checkoutBtn">
+        <i class="fab fa-whatsapp"></i> <span data-i18n="cart_checkout">Order via WhatsApp</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCheckout()">&times;</button>
+    <h3>🛸 <span data-i18n="modal_title">Shipping Details</span></h3>
+    <p class="modal-sub" data-i18n="modal_sub">Enter your details to complete the order</p>
+    <form id="checkoutForm" onsubmit="submitCheckout(event)">
+      <input type="text" id="cf_name" placeholder="Full Name" required data-i18n-placeholder="modal_name" />
+      <input type="tel" id="cf_phone" placeholder="Phone Number" required data-i18n-placeholder="modal_phone" />
+      <input type="text" id="cf_city" placeholder="City" required data-i18n-placeholder="modal_city" />
+      <input type="text" id="cf_street" placeholder="Street / District" required data-i18n-placeholder="modal_street" />
+      <div class="modal-row">
+        <input type="text" id="cf_building" placeholder="Building" data-i18n-placeholder="modal_building" />
+        <input type="text" id="cf_apartment" placeholder="Apartment / Floor" data-i18n-placeholder="modal_apartment" />
+      </div>
+      <textarea id="cf_notes" placeholder="Additional notes (optional)" rows="2" data-i18n-placeholder="modal_notes"></textarea>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+        <i class="fab fa-whatsapp"></i> <span data-i18n="modal_submit">Send Order via WhatsApp</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Story -->
+<section class="section section-alt" id="story">
+  <div class="container">
+    <h2 class="section-title" data-i18n="section_story_title">The <span>Secret</span></h2>
+    <p class="section-sub" data-i18n="section_story_sub">How alien technology became Earth's best shoes</p>
+    <div class="story-grid">
+      <div class="story-text">
+        <p data-i18n-html="story_p1">In <strong>2047</strong>, a meteorite crashed near Area 51. Inside were <strong>alien blueprints</strong> for the most advanced footwear in the universe. We decoded them.</p>
+        <p data-i18n-html="story_p2">Every pair carries <strong>zero-gravity technology</strong>, <strong>nebula fibers</strong>, and a 100-year <strong>galactic warranty</strong>.</p>
+        <div class="story-values">
+          <span><i class="fas fa-microchip"></i> <span data-i18n="val_1">Alien Tech</span></span>
+          <span><i class="fas fa-weight-hanging"></i> <span data-i18n="val_2">Zero-G</span></span>
+          <span><i class="fas fa-star"></i> <span data-i18n="val_3">Nebula Style</span></span>
+          <span><i class="fas fa-infinity"></i> <span data-i18n="val_4">100yr Warranty</span></span>
+        </div>
+      </div>
+      <div class="story-card">
+        <img src="assets/logo.png" alt="Area 51" style="width:100px;display:block;margin:0 auto 12px;filter:drop-shadow(0 0 20px var(--primary-glow));" />
+        <h3>AREA 51</h3>
+        <p data-i18n="story_card_p">Shoes From Another Galaxy — Since 2047</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section" id="contact">
+  <div class="container">
+    <h2 class="section-title" data-i18n="section_contact_title">Send a <span>Signal</span></h2>
+    <p class="section-sub" data-i18n="section_contact_sub">We reply within 3 light-years</p>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3 data-i18n="contact_heading">Beam Us a Message</h3>
+        <p data-i18n="contact_desc">Use quantum frequency to send us a message</p>
+        <div class="social-links">
+          <a href="https://wa.me/9647764762005" target="_blank" class="social-link" style="--sc:#25D366;"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://instagram.com" target="_blank" class="social-link" style="--sc:#ff0050;"><i class="fab fa-instagram"></i></a>
+          <a href="https://x.com" target="_blank" class="social-link" style="--sc:#1da1f2;"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://tiktok.com" target="_blank" class="social-link" style="--sc:#ff0000;"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm" action="https://formsubmit.co/your-email@example.com" method="POST">
+        <input type="hidden" name="_next" value="https://area51.netlify.app" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" style="display:none" />
+        <div class="form-group">
+          <input type="text" placeholder="Your Name" required data-i18n-placeholder="form_name" />
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Your Galaxy" required data-i18n-placeholder="form_email" />
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="form-group">
+          <textarea placeholder="Your Message..." rows="3" required data-i18n-placeholder="form_message"></textarea>
+          <i class="fas fa-pen"></i>
+        </div>
+        <button type="submit" class="btn btn-primary"><span data-i18n="form_submit">Transmit</span> <i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <img src="assets/logo.png" alt="Area 51" style="width:40px;display:block;margin:0 auto 4px;" />
+  <h3>AREA <span style="color:var(--primary)">51</span></h3>
+  <p data-i18n="footer_desc">Shoes From Another Galaxy — Since 2047</p>
+  <div class="footer-links">
+    <a href="#products" data-i18n="nav_products">Shoes</a>
+    <a href="#story" data-i18n="nav_story">Story</a>
+    <a href="/products" data-i18n="nav_store">Store</a>
+    <a href="/admin">Admin</a>
+    <a href="https://wa.me/9647764762005">WhatsApp</a>
+  </div>
+  <div class="copy" data-i18n="footer_copy">© 2047 Area 51. All rights reserved.</div>
+</footer>
+
+<!-- Modal CSS -->
+<style>
+.modal-overlay {
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:var(--card, #111128); border:1px solid var(--border, rgba(0,255,65,0.12));
+  border-radius:16px; padding:32px 28px; width:100%; max-width:460px;
+  position:relative; max-height:90vh; overflow-y:auto;
+}
+.modal-close {
+  position:absolute; top:12px; left:12px;
+  background:none; border:none; color:var(--text-muted,#7788bb);
+  font-size:28px; cursor:pointer; line-height:1; transition:0.2s;
+}
+.ltr .modal-close { left:auto; right:12px; }
+.modal-close:hover { color:var(--text); }
+.modal h3 { font-family:'Teko',sans-serif; font-size:24px; margin-bottom:4px; }
+.modal-sub { font-size:13px; color:var(--text-muted,#7788bb); margin-bottom:20px; }
+.modal input, .modal textarea {
+  width:100%; padding:12px 14px; margin-bottom:10px;
+  background:var(--bg,#0d0d2b); border:1px solid var(--border,rgba(0,255,65,0.12));
+  border-radius:8px; color:var(--text); font-family:'Cairo',sans-serif;
+  font-size:14px; outline:none; transition:0.3s;
+}
+.modal input:focus, .modal textarea:focus { border-color:var(--primary,#00ff41); }
+.modal textarea { resize:vertical; }
+.modal-row { display:flex; gap:10px; }
+.modal-row input { flex:1; }
+@media(max-width:480px) { .modal-row { flex-direction:column; gap:0; } }
+</style>
+
+<script>
+// ===== PRODUCTS =====
+const defaultProducts = [
+  { icon:'👟', nameEn:'Nebula Runner', nameAr:'Nebula Runner', price:129 },
+  { icon:'👟', nameEn:'Lunar Walker', nameAr:'Lunar Walker', price:149 },
+  { icon:'👟', nameEn:'Alien Stomper', nameAr:'Alien Stomper', price:179 },
+  { icon:'👟', nameEn:'Galaxy Glide', nameAr:'Galaxy Glide', price:139 },
+  { icon:'👟', nameEn:'Cosmo Kick', nameAr:'Cosmo Kick', price:159 },
+  { icon:'👟', nameEn:'UFO Drift', nameAr:'UFO Drift', price:199 },
+];
+const defaultDescs = {
+  en: ['Light-speed with alien propulsion','Zero-gravity moon boots','Built for asteroid terrain','Nebula weave casual','Quantum energy return','UFO levitation soles'],
+  ar: ['سرعة الضوء بدفع فضائي','أحذية قمرية جاذبية صفرية','لتضاريس الكويكبات','نسيج سديمي كاجوال','ارتداد طاقة كمي','نعال طائرة UFO']
+};
+
+function getProducts() {
+  const admin = JSON.parse(localStorage.getItem('a51-products') || '[]');
+  if (admin.length > 0) return admin;
+  return defaultProducts.map((p, i) => ({
+    id: i,
+    image: null,
+    price: p.price,
+    nameEn: p.nameEn,
+    nameAr: p.nameAr,
+    descEn: defaultDescs.en[i],
+    descAr: defaultDescs.ar[i],
+    sizes: [40,41,42,43,44]
+  }));
+}
+
+let lang = localStorage.getItem('a51-lang') || 'en';
+let cart = JSON.parse(localStorage.getItem('a51-cart') || '[]');
+let qty = {};
+
+// ===== TRANSLATIONS =====
+const t = {
+  en: {
+    nav_home:'Home', nav_products:'Shoes', nav_story:'Story', nav_store:'Store', nav_contact:'Contact',
+    loader_sub:'Loading...',
+    hero_sub:'Shoes From Another Galaxy',
+    hero_desc:'Space-grade footwear with alien technology. Walk on the moon — literally.',
+    hero_btn_buy:'Shop Collection', hero_btn_story:'The Story',
+    section_products_title:'Galactic Collection', section_products_sub:'Footwear engineered from alien blueprints',
+    cart_title:'Your Orbit', cart_total:'Total', cart_checkout:'Order via WhatsApp',
+    section_story_title:'The Secret', section_story_sub:'How alien technology became Earth\'s best shoes',
+    story_p1:'In <strong>2047</strong>, a meteorite crashed near Area 51. Inside were <strong>alien blueprints</strong> for the most advanced footwear in the universe. We decoded them.',
+    story_p2:'Every pair carries <strong>zero-gravity technology</strong>, <strong>nebula fibers</strong>, and a 100-year <strong>galactic warranty</strong>.',
+    val_1:'Alien Tech', val_2:'Zero-G', val_3:'Nebula Style', val_4:'100yr Warranty',
+    story_card_p:'Shoes From Another Galaxy — Since 2047',
+    section_contact_title:'Send a Signal', section_contact_sub:'We reply within 3 light-years',
+    contact_heading:'Beam Us a Message', contact_desc:'Use quantum frequency to send us a message',
+    form_name:'Your Name', form_email:'Your Galaxy', form_message:'Your Message...',
+    form_submit:'Transmit', add_btn:'Add to Orbit',
+    footer_desc:'Shoes From Another Galaxy — Since 2047',
+    footer_copy:'© 2047 Area 51. All rights reserved.',
+    notif_added:'Added to orbit! 🛸',
+    cart_empty:'Your orbit is empty',
+    modal_title:'Shipping Details', modal_sub:'Enter your details to complete the order',
+    modal_name:'Full Name', modal_phone:'Phone Number', modal_city:'City',
+    modal_street:'Street / District', modal_building:'Building', modal_apartment:'Apartment / Floor',
+    modal_notes:'Additional notes (optional)', modal_submit:'Send Order via WhatsApp',
+  },
+  ar: {
+    nav_home:'الرئيسية', nav_products:'الأحذية', nav_story:'القصة', nav_store:'المتجر', nav_contact:'اتصل',
+    loader_sub:'جاري التحميل...',
+    hero_sub:'أحذية من مجرة أخرى',
+    hero_desc:'أحذية فضائية بتقنية خارج كوكب الأرض. امشِ على القمر — حرفيًا.',
+    hero_btn_buy:'تسوق المجموعة', hero_btn_story:'القصة',
+    section_products_title:'المجموعة المجرية', section_products_sub:'أحذية مصممة من مخططات فضائية',
+    cart_title:'مدارك', cart_total:'المجموع', cart_checkout:'اطلب عبر واتساب',
+    section_story_title:'السر', section_story_sub:'كيف أصبحت التكنولوجيا الفضائية أفضل أحذية على الأرض',
+    story_p1:'في عام <strong>2047</strong>، سقط نيزك بالقرب من Area 51. بداخله <strong>مخططات فضائية</strong> لأحدث أحذية في الكون. فككنا شفرتها.',
+    story_p2:'كل زوج يحمل <strong>تقنية الجاذبية الصفرية</strong> و<strong>ألياف السديم</strong> و<strong>ضمان مجري</strong> لمدة 100 عام.',
+    val_1:'تقنية فضائية', val_2:'جاذبية صفرية', val_3:'أناقة سديمية', val_4:'ضمان 100 عام',
+    story_card_p:'أحذية من مجرة أخرى — منذ 2047',
+    section_contact_title:'أرسل إشارة', section_contact_sub:'نرد خلال 3 سنوات ضوئية',
+    contact_heading:'أرسل لنا رسالة', contact_desc:'استخدم التردد الكمي لإرسال رسالة لنا',
+    form_name:'اسمك', form_email:'مجرتك', form_message:'رسالتك...',
+    form_submit:'إرسال', add_btn:'أضف للمدار',
+    footer_desc:'أحذية من مجرة أخرى — منذ 2047',
+    footer_copy:'© 2047 Area 51. جميع الحقوق محفوظة.',
+    notif_added:'تمت الإضافة للمدار! 🛸',
+    cart_empty:'مدارك فارغ',
+    modal_title:'تفاصيل الشحن', modal_sub:'أدخل بياناتك لإتمام الطلب',
+    modal_name:'الاسم الكامل', modal_phone:'رقم الهاتف', modal_city:'المدينة',
+    modal_street:'الشارع / المنطقة', modal_building:'رقم البناء', modal_apartment:'الشقة / الطابق',
+    modal_notes:'ملاحظات إضافية (اختياري)', modal_submit:'أرسل الطلب عبر واتساب',
+  }
+};
+
+function applyLang(l) {
+  lang = l;
+  const tr = t[l];
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k=el.getAttribute('data-i18n'); if(tr[k]) el.textContent=tr[k]; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { const k=el.getAttribute('data-i18n-html'); if(tr[k]) el.innerHTML=tr[k]; });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k=el.getAttribute('data-i18n-placeholder'); if(tr[k]) el.placeholder=tr[k]; });
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+  document.body.classList.toggle('ltr', l === 'en');
+  localStorage.setItem('a51-lang', l);
+  document.getElementById('langToggle').textContent = l === 'en' ? 'AR' : 'EN';
+  renderProducts();
+  renderCart();
+}
+
+// ===== THEME =====
+const savedTheme = localStorage.getItem('a51-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('a51-theme', next);
+  document.getElementById('themeToggle').innerHTML = next === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+});
+
+// ===== RENDER PRODUCTS =====
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+  const products = getProducts();
+  const tr = t[lang];
+
+  grid.innerHTML = products.map((p, i) => {
+    const name = lang === 'en' ? p.nameEn : p.nameAr;
+    const desc = lang === 'en' ? p.descEn : p.descAr;
+    const sizesHtml = p.sizes.map(s => `<span style="display:inline-block;padding:2px 8px;margin:2px;border-radius:4px;background:rgba(0,255,65,0.06);border:1px solid var(--border);font-size:11px;">${s}</span>`).join('');
+    const imgHtml = p.image
+      ? `<img src="${p.image}" alt="${name}" style="width:100%;height:120px;object-fit:contain;margin-bottom:8px;border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="icon" style="display:none">👟</span>`
+      : `<span class="icon">👟</span>`;
+    qty[i] = qty[i] || 1;
+    return `
+      <div class="product-card">
+        ${imgHtml}
+        <h3>${name}</h3>
+        <p>${desc}</p>
+        <div style="margin-bottom:8px;">${sizesHtml}</div>
+        <div class="price">${lang === 'en' ? '$' : ''}${p.price}${lang === 'ar' ? '$' : ''}</div>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+          <span class="qty-num" id="qty_${i}">${qty[i]}</span>
+          <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart(${i})">${tr.add_btn} <i class="fas fa-shopping-cart"></i></button>
+      </div>
+    `;
+  }).join('');
+}
+
+function changeQty(i, d) { qty[i] = Math.max(1, (qty[i]||1)+d); const e=document.getElementById('qty_'+i); if(e) e.textContent=qty[i]; }
+
+// ===== CART =====
+function addToCart(i) {
+  const products = getProducts();
+  const p = products[i];
+  const name = lang === 'en' ? p.nameEn : p.nameAr;
+  const q = qty[i]||1;
+  const ex = cart.find(x => x.idx === i);
+  if (ex) ex.qty += q; else cart.push({idx:i, name, price:p.price, icon:'👟', qty:q});
+  localStorage.setItem('a51-cart', JSON.stringify(cart));
+  qty[i] = 1; const e=document.getElementById('qty_'+i); if(e) e.textContent=1;
+  renderCart();
+  showNotif(t[lang].notif_added);
+}
+
+function removeFromCart(i) { cart = cart.filter(x => x.idx !== i); localStorage.setItem('a51-cart', JSON.stringify(cart)); renderCart(); }
+
+function renderCart() {
+  const con = document.getElementById('cartItems');
+  const te = document.getElementById('cartTotal');
+  if (!con) return;
+  if (!cart.length) {
+    con.innerHTML = `<div class="cart-empty"><span class="icon">🛸</span>${t[lang].cart_empty}</div>`;
+    te.textContent = (lang === 'en' ? 'Total' : 'المجموع') + ': $0';
+    return;
+  }
+  con.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-info">
+        <span class="icon">👟</span>
+        <div><div class="name">${item.name}</div><div class="meta">${lang==='en'?'$':''}${item.price}${lang==='ar'?'$':''} × ${item.qty}</div></div>
+      </div>
+      <div>
+        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:8px;">${lang==='en'?'$':''}${item.price*item.qty}${lang==='ar'?'$':''}</span>
+        <button class="remove" onclick="removeFromCart(${item.idx})"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+  `).join('');
+  const total = cart.reduce((s, it) => s + it.price*it.qty, 0);
+  te.textContent = (lang === 'en' ? 'Total' : 'المجموع') + ': ' + (lang==='en'?'$':'') + total + (lang==='ar'?'$':'');
+}
+
+function showNotif(msg) {
+  const n = document.getElementById('cartNotif');
+  n.querySelector('span').textContent = msg;
+  n.classList.add('show');
+  clearTimeout(n._t);
+  n._t = setTimeout(() => n.classList.remove('show'), 2000);
+}
+
+// ===== CHECKOUT MODAL =====
+document.getElementById('checkoutBtn').addEventListener('click', function() {
+  if (!cart.length) { alert(lang === 'en' ? 'Your orbit is empty!' : 'مدارك فارغ!'); return; }
+  document.getElementById('checkoutModal').classList.add('open');
+});
+
+function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
+
+function submitCheckout(e) {
+  e.preventDefault();
+  const name = document.getElementById('cf_name').value.trim();
+  const phone = document.getElementById('cf_phone').value.trim();
+  const city = document.getElementById('cf_city').value.trim();
+  const street = document.getElementById('cf_street').value.trim();
+  const building = document.getElementById('cf_building').value.trim();
+  const apartment = document.getElementById('cf_apartment').value.trim();
+  const notes = document.getElementById('cf_notes').value.trim();
+
+  if (!name || !phone || !city || !street) {
+    alert(lang === 'en' ? 'Please fill all required fields' : 'يرجى ملء جميع الحقول المطلوبة');
+    return;
+  }
+
+  let msg = lang === 'en'
+    ? '🛸 *NEW ORDER — AREA 51*\n═══════════════════\n'
+    : '🛸 *طلب جديد — Area 51*\n═══════════════════\n';
+
+  msg += lang === 'en' ? '\n👤 *Customer Info*' : '\n👤 *معلومات العميل*';
+  msg += `\n• ${lang === 'en' ? 'Name' : 'الاسم'}: ${name}`;
+  msg += `\n• ${lang === 'en' ? 'Phone' : 'الهاتف'}: ${phone}`;
+
+  msg += lang === 'en' ? '\n\n📍 *Shipping Address*' : '\n\n📍 *عنوان الشحن*';
+  msg += `\n• ${lang === 'en' ? 'City' : 'المدينة'}: ${city}`;
+  msg += `\n• ${lang === 'en' ? 'Street' : 'الشارع'}: ${street}`;
+  if (building) msg += `\n• ${lang === 'en' ? 'Building' : 'البناء'}: ${building}`;
+  if (apartment) msg += `\n• ${lang === 'en' ? 'Apartment' : 'الشقة'}: ${apartment}`;
+
+  msg += lang === 'en' ? '\n\n👟 *Order Details*' : '\n\n👟 *تفاصيل الطلب*';
+  cart.forEach(item => {
+    msg += `\n• 👟 ${item.name} × ${item.qty} = ` + (lang==='en'?'$':'') + (item.price * item.qty) + (lang==='ar'?'$':'');
+  });
+  const total = cart.reduce((s, it) => s + it.price*it.qty, 0);
+  msg += lang === 'en'
+    ? `\n═══════════════════\n*Total: $${total}*`
+    : `\n═══════════════════\n*المجموع: ${total}$*`;
+  if (notes) msg += lang === 'en' ? `\n\n📝 *Notes*: ${notes}` : `\n\n📝 *ملاحظات*: ${notes}`;
+  msg += lang === 'en' ? '\n\n👽 Thank you for shopping with Area 51!' : '\n\n👽 شكرًا لتسوقك مع Area 51!';
+
+  const url = 'https://wa.me/9647764762005?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+
+  // Clear cart
+  cart = [];
+  localStorage.setItem('a51-cart', JSON.stringify(cart));
+  renderCart();
+  closeCheckout();
+  document.getElementById('checkoutForm').reset();
+}
+
+// ===== LANG =====
+document.getElementById('langToggle').addEventListener('click', () => applyLang(lang === 'en' ? 'ar' : 'en'));
+
+// ===== LOADER =====
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500));
+setTimeout(() => document.getElementById('loader').classList.add('hidden'), 3000);
+
+// ===== NAV =====
+const navbar = document.getElementById('navbar');
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  navbar.classList.toggle('scrolled', s > 60);
+  if (s > 100 && s > lastScroll) navbar.classList.add('hidden'); else navbar.classList.remove('hidden');
+  lastScroll = s;
+});
+navToggle.addEventListener('click', () => { navToggle.classList.toggle('active'); navLinks.classList.toggle('active'); });
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => { navToggle.classList.remove('active'); navLinks.classList.remove('active'); }));
+
+// ===== INIT =====
+applyLang(localStorage.getItem('a51-lang') || 'en');
+
+// ===== CONTACT =====
+document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('.btn');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + (lang==='en'?'Sending...':'جاري الإرسال...');
+  btn.disabled = true;
+  const fd = new FormData(this);
+  fetch(this.action, { method:'POST', body:fd }).then(()=>done()).catch(()=>done());
+  function done() {
+    btn.innerHTML = '<i class="fas fa-check-circle"></i> ' + (lang==='en'?'Sent ✓':'تم ✓');
+    btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+    setTimeout(() => { btn.innerHTML=orig; btn.style.background=''; btn.disabled=false; }, 2500);
+  }
+});
+
+// ===== CURSOR =====
+if (window.innerWidth > 768) {
+  const c = document.getElementById('cursor'), ct = document.getElementById('cursorTrail');
+  let tx=0, ty=0, cx=0, cy=0;
+  document.addEventListener('mousemove', e => { c.style.left=e.clientX+'px'; c.style.top=e.clientY+'px'; tx=e.clientX; ty=e.clientY; });
+  (function anim(){ cx+=(tx-cx)*0.08; cy+=(ty-cy)*0.08; ct.style.left=cx+'px'; ct.style.top=cy+'px'; requestAnimationFrame(anim); })();
+  document.querySelectorAll('a,button,.product-card,.add-btn,.qty-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => c.classList.add('hover'));
+    el.addEventListener('mouseleave', () => c.classList.remove('hover'));
+  });
+  document.addEventListener('mousedown', () => c.style.transform='translate(-50%,-50%) scale(0.85)');
+  document.addEventListener('mouseup', () => c.style.transform='translate(-50%,-50%) scale(1)');
+}
+
+// ===== PAGE TRANSITION =====
+document.querySelectorAll('a[href$=".html"],a[href="/products"],a[href="/admin"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const href = link.getAttribute('href');
+    if (!href || href==='#') return;
+    e.preventDefault();
+    document.getElementById('pageTransition').classList.add('active');
+    setTimeout(() => { window.location.href = href; }, 300);
+  });
+});
+window.addEventListener('pageshow', () => document.getElementById('pageTransition').classList.remove('active'));
+</script>
+</body>
+</html>
