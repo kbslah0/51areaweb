@@ -65,6 +65,24 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="productModal" onclick="if(event.target===this)closeProduct()">
+  <div class="modal product-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeProduct()">&times;</button>
+    <div class="prod-img" id="prodImg"></div>
+    <h3 id="prodName"></h3>
+    <p class="prod-desc" id="prodDesc"></p>
+    <div class="prod-price" id="prodPrice"></div>
+    <div class="prod-sizes" id="prodSizes"></div>
+    <p class="prod-label">المقاسات المتاحة:</p>
+    <div class="qty-wrap" style="margin:12px 0">
+      <button class="qty-btn" onclick="prodQty(-1)">−</button>
+      <span class="qty-num" id="prodQty">1</span>
+      <button class="qty-btn" onclick="prodQty(1)">+</button>
+    </div>
+    <button class="add-btn" style="width:100%;justify-content:center;padding:10px;" id="prodAddBtn"><i class="fas fa-cart-plus"></i> <span>أضف للسلة</span></button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal">
     <button class="modal-close" onclick="closeCheckout()">&times;</button>
@@ -88,6 +106,16 @@
 </div>
 
 <style>
+.product-modal { text-align:center; max-width:380px; }
+.product-modal .prod-img { font-size:72px; margin-bottom:8px; }
+.product-modal .prod-img img { width:100%; max-height:200px; object-fit:contain; border-radius:10px; }
+.product-modal h3 { font-size:20px; margin-bottom:4px; }
+.product-modal .prod-desc { font-size:13px; color:var(--text-muted); margin-bottom:6px; }
+.product-modal .prod-price { font-family:'Teko',sans-serif; font-size:28px; color:var(--primary); font-weight:700; }
+.product-modal .prod-sizes { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin:8px 0; }
+.product-modal .prod-sizes span { padding:4px 12px; border-radius:6px; background:rgba(0,255,65,0.06); border:1px solid var(--border); font-size:13px; }
+.product-modal .prod-label { font-size:11px; color:var(--text-muted); margin-bottom:4px; }
+
 .modal-overlay {
   position:fixed; inset:0; z-index:9999;
   background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
@@ -154,13 +182,13 @@ const tr = {
   ar: {
     backHome:'الرئيسية', storeSub:'جميع المنتجات الفضائية', cartTitle:'سلة المشتريات',
     total:'المجموع', checkout:'اطلب عبر واتساب', backHome2:'العودة للرئيسية',
-    add:'أضف للسلة', cartEmpty:'السلة فارغة', added:'تمت الإضافة!',
+    size_label:'المقاسات المتاحة:', add:'أضف للسلة', cartEmpty:'السلة فارغة', added:'تمت الإضافة!',
     modalTitle:'بيانات الشحن', modalSub:'أدخل بياناتك لإتمام الطلب', modalBtn:'أرسل الطلب',
   },
   en: {
     backHome:'Home', storeSub:'All galactic products', cartTitle:'Your Cart',
     total:'Total', checkout:'Order via WhatsApp', backHome2:'Back to Home',
-    add:'Add to Cart', cartEmpty:'Cart is empty', added:'Added!',
+    size_label:'Available sizes:', add:'Add to Cart', cartEmpty:'Cart is empty', added:'Added!',
     modalTitle:'Shipping Info', modalSub:'Enter your details to order', modalBtn:'Send Order',
   }
 };
@@ -177,6 +205,8 @@ function applyLang(l) {
   document.getElementById('modalTitle').textContent = d.modalTitle;
   document.getElementById('modalSub').textContent = d.modalSub;
   document.getElementById('modalBtn').textContent = d.modalBtn;
+  const sl = document.querySelector('.prod-label');
+  if (sl) sl.textContent = d.size_label;
   document.getElementById('storeLang').textContent = l === 'en' ? 'AR' : 'EN';
   document.documentElement.lang = l;
   document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
@@ -209,18 +239,18 @@ function renderProducts() {
       ? `<img src="${p.image}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="icon" style="display:none">👟</span>`
       : `<span class="icon">👟</span>`;
     qty[i] = qty[i] || 1;
-    return `<div class="product-card">
+    return `<div class="product-card" onclick="openProduct(${i})" style="cursor:pointer;">
       ${img}
       <h3>${name}</h3>
       <p>${desc}</p>
       <div style="margin-bottom:6px;">${sizes}</div>
       <div class="price">$${p.price}</div>
-      <div class="qty-wrap">
+      <div class="qty-wrap" onclick="event.stopPropagation()">
         <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
         <span class="qty-num" id="qty_${i}">${qty[i]}</span>
         <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
       </div>
-      <button class="add-btn" onclick="addItem(${i})">${d.add} <i class="fas fa-cart-plus"></i></button>
+      <button class="add-btn" onclick="event.stopPropagation();addItem(${i})">${d.add} <i class="fas fa-cart-plus"></i></button>
     </div>`;
   }).join('');
 }
@@ -261,6 +291,35 @@ function renderCart() {
   ).join('');
   te.textContent = d.total + ': $' + cart.reduce((s, it) => s + it.price*it.qty, 0);
 }
+
+let prodIdx = 0;
+let prodQtyVal = 1;
+function openProduct(i) {
+  prodIdx = i; prodQtyVal = 1;
+  const p = getProducts()[i];
+  const name = lang === 'en' ? p.nameEn : p.nameAr;
+  const desc = lang === 'en' ? p.descEn : p.descAr;
+  document.getElementById('prodImg').innerHTML = p.image
+    ? `<img src="${p.image}" alt="${name}" onerror="this.outerHTML='<span style=\\'font-size:72px\\'>👟</span>'" />`
+    : `<span style="font-size:72px">👟</span>`;
+  document.getElementById('prodName').textContent = name;
+  document.getElementById('prodDesc').textContent = desc;
+  document.getElementById('prodPrice').textContent = '$' + p.price;
+  document.getElementById('prodSizes').innerHTML = (p.sizes||[]).map(s => `<span>${s}</span>`).join('');
+  document.getElementById('prodQty').textContent = 1;
+  document.getElementById('productModal').classList.add('open');
+}
+function closeProduct() { document.getElementById('productModal').classList.remove('open'); }
+function prodQty(d) { prodQtyVal = Math.max(1, prodQtyVal + d); document.getElementById('prodQty').textContent = prodQtyVal; }
+document.getElementById('prodAddBtn').addEventListener('click', function() {
+  const p = getProducts()[prodIdx];
+  const name = lang === 'en' ? p.nameEn : p.nameAr;
+  const ex = cart.find(x => x.idx === prodIdx);
+  if (ex) ex.qty += prodQtyVal; else cart.push({idx:prodIdx, name, price:p.price, icon:'👟', qty:prodQtyVal});
+  localStorage.setItem('a51-cart', JSON.stringify(cart));
+  renderCart();
+  closeProduct();
+});
 
 document.getElementById('checkoutBtn').addEventListener('click', function() {
   if (!cart.length) { alert(tr[lang].cartEmpty); return; }
