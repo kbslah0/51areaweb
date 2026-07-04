@@ -3,97 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Store | Area 51</title>
+  <title>المتجر | Area 51</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='80'%3E👟%3C/text%3E%3C/svg%3E" />
-  <meta name="theme-color" content="#00ff41" />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
   <style>
-    .store-page { min-height:100vh; background:var(--bg); padding:80px 20px 40px; }
-    .store-page .cart-notif { position:fixed; bottom:20px; }
-    .store-header { text-align:center; margin-bottom:32px; }
-    .store-header .store-icon { font-size:64px; display:block; animation:floatY 2.5s var(--ease) infinite alternate; }
-    .store-header h1 { font-family:'Teko',sans-serif; font-size:clamp(36px,7vw,64px); color:var(--primary); letter-spacing:4px; text-shadow:0 0 30px var(--primary-glow); }
+    .store-page { min-height:100vh; background:var(--bg); padding:70px 16px 30px; }
+    .store-header { text-align:center; margin-bottom:24px; }
+    .store-header .icon { font-size:48px; display:block; }
+    .store-header h1 { font-family:'Teko',sans-serif; font-size:clamp(28px,6vw,48px); color:var(--primary); letter-spacing:3px; }
     .store-header h1 span { color:var(--text); }
-    .store-header p { color:var(--text-muted); font-size:15px; }
-    @keyframes floatY { from { transform:translateY(0); } to { transform:translateY(-12px); } }
+    .store-header p { color:var(--text-muted); font-size:14px; }
     .store-toolbar {
-      position:fixed; top:16px; left:50%; transform:translateX(-50%);
-      display:flex; gap:8px; z-index:100; align-items:center;
+      position:fixed; top:10px; left:50%; transform:translateX(-50%);
+      display:flex; gap:6px; z-index:100; align-items:center;
     }
-    .store-toolbar button, .store-toolbar a {
-      background:var(--glass); backdrop-filter:blur(12px);
-      border:1px solid var(--border); color:var(--text-muted);
-      font-family:'Teko',sans-serif; font-size:12px; font-weight:700;
-      letter-spacing:1px; padding:5px 14px; border-radius:20px;
-      cursor:pointer; transition:0.3s; text-decoration:none; line-height:1.4;
+    .store-toolbar a, .store-toolbar button {
+      background:var(--bg); border:1px solid var(--border); color:var(--text-muted);
+      font-family:'Teko',sans-serif; font-size:11px; font-weight:700;
+      letter-spacing:1px; padding:4px 12px; border-radius:20px;
+      cursor:pointer; transition:0.2s; text-decoration:none;
     }
-    .store-toolbar button:hover, .store-toolbar a:hover { border-color:var(--primary); color:var(--primary); }
-    .store-toolbar .theme-btn-store { width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px; }
+    .store-toolbar a:hover, .store-toolbar button:hover { border-color:var(--primary); color:var(--primary); }
+    .store-toolbar .theme-sm { width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px; }
     .store-back {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 24px; border-radius:50px; margin-top:32px;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:8px 20px; border-radius:50px; margin-top:24px;
       color:var(--text-muted); border:1px solid var(--border);
-      text-decoration:none; font-size:14px; font-weight:700; transition:0.3s;
+      text-decoration:none; font-size:13px; font-weight:700; transition:0.2s;
     }
     .store-back:hover { color:var(--primary); border-color:var(--primary); }
-    @media(max-width:600px) { .store-page { padding:70px 12px 30px; } }
   </style>
 </head>
 <body>
-<div class="page-transition" id="pageTransition"></div>
-<div class="cart-notif" id="cartNotif"><i class="fas fa-check-circle"></i><span></span></div>
-
 <div class="store-page">
   <div class="store-toolbar">
-    <a href="/"><i class="fas fa-arrow-right"></i> <span id="backHome">Home</span></a>
+    <a href="/"><i class="fas fa-arrow-right"></i> <span id="backHome">الرئيسية</span></a>
     <button id="storeLang">EN</button>
-    <button class="theme-btn-store" id="storeTheme"><i class="fas fa-moon"></i></button>
+    <button class="theme-sm" id="storeTheme"><i class="fas fa-moon"></i></button>
   </div>
   <div class="store-header">
-    <span class="store-icon">👟</span>
+    <span class="icon">👟</span>
     <h1>AREA 51 <span>STORE</span></h1>
-    <p id="storeSub">Galactic footwear collection</p>
+    <p id="storeSub">جميع المنتجات الفضائية</p>
   </div>
-
   <div class="container">
     <div class="products-grid" id="productsGrid"></div>
-
-    <div class="cart-box" style="margin-top:32px;">
-      <h2>🛸 <span id="cartTitle">Your Orbit</span></h2>
+    <div class="cart-box" style="margin-top:20px;">
+      <h2>🛸 <span id="cartTitle">سلة المشتريات</span></h2>
       <div id="cartItems"></div>
-      <div class="cart-total" id="cartTotal"><span id="totalLabel">Total</span>: $0</div>
+      <div class="cart-total" id="cartTotal"><span id="totalLabel">المجموع</span>: $0</div>
       <button class="whatsapp-btn" id="checkoutBtn">
-        <i class="fab fa-whatsapp"></i> <span id="checkoutLabel">Order via WhatsApp</span>
+        <i class="fab fa-whatsapp"></i> <span id="checkoutLabel">اطلب عبر واتساب</span>
       </button>
     </div>
-
     <div style="text-align:center;">
-      <a class="store-back" href="/"><i class="fas fa-arrow-right"></i> <span id="backHome2">Back to Home</span></a>
+      <a class="store-back" href="/"><i class="fas fa-arrow-right"></i> <span id="backHome2">العودة للرئيسية</span></a>
     </div>
   </div>
 </div>
 
-<!-- Checkout Modal -->
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal">
     <button class="modal-close" onclick="closeCheckout()">&times;</button>
-    <h3>🛸 <span id="modalTitle">Shipping Details</span></h3>
-    <p class="modal-sub" id="modalSub">Enter your details to complete the order</p>
+    <h3 id="modalTitle">بيانات الشحن</h3>
+    <p class="modal-sub" id="modalSub">أدخل بياناتك لإتمام الطلب</p>
     <form id="checkoutForm" onsubmit="submitCheckout(event)">
-      <input type="text" id="cf_name" placeholder="Full Name" required />
-      <input type="tel" id="cf_phone" placeholder="Phone Number" required />
-      <input type="text" id="cf_city" placeholder="City" required />
-      <input type="text" id="cf_street" placeholder="Street / District" required />
+      <input type="text" id="cf_name" placeholder="الاسم الكامل" required />
+      <input type="tel" id="cf_phone" placeholder="رقم الهاتف" required />
+      <input type="text" id="cf_city" placeholder="المدينة" required />
+      <input type="text" id="cf_street" placeholder="الشارع / الحي" required />
       <div class="modal-row">
-        <input type="text" id="cf_building" placeholder="Building" />
-        <input type="text" id="cf_apartment" placeholder="Apartment / Floor" />
+        <input type="text" id="cf_building" placeholder="رقم البناء" />
+        <input type="text" id="cf_apartment" placeholder="الشقة / الطابق" />
       </div>
-      <textarea id="cf_notes" placeholder="Additional notes (optional)" rows="2"></textarea>
+      <textarea id="cf_notes" placeholder="ملاحظات (اختياري)" rows="2"></textarea>
       <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
-        <i class="fab fa-whatsapp"></i> <span id="modalSubmit">Send Order via WhatsApp</span>
+        <i class="fab fa-whatsapp"></i> <span id="modalBtn">أرسل الطلب</span>
       </button>
     </form>
   </div>
@@ -108,93 +96,87 @@
 }
 .modal-overlay.open { display:flex; }
 .modal {
-  background:var(--card, #111128); border:1px solid var(--border, rgba(0,255,65,0.12));
-  border-radius:16px; padding:32px 28px; width:100%; max-width:460px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:28px 24px; width:100%; max-width:420px;
   position:relative; max-height:90vh; overflow-y:auto;
 }
 .modal-close {
-  position:absolute; top:12px; left:12px;
-  background:none; border:none; color:var(--text-muted,#7788bb);
-  font-size:28px; cursor:pointer; line-height:1; transition:0.2s;
+  position:absolute; top:10px; left:10px;
+  background:none; border:none; color:var(--text-muted);
+  font-size:26px; cursor:pointer; line-height:1;
 }
-.ltr .modal-close { left:auto; right:12px; }
+.ltr .modal-close { left:auto; right:10px; }
 .modal-close:hover { color:var(--text); }
-.modal h3 { font-family:'Teko',sans-serif; font-size:24px; margin-bottom:4px; }
-.modal-sub { font-size:13px; color:var(--text-muted,#7788bb); margin-bottom:20px; }
+.modal h3 { font-family:'Teko',sans-serif; font-size:22px; margin-bottom:4px; }
+.modal-sub { font-size:13px; color:var(--text-muted); margin-bottom:16px; }
 .modal input, .modal textarea {
-  width:100%; padding:12px 14px; margin-bottom:10px;
-  background:var(--bg,#0d0d2b); border:1px solid var(--border,rgba(0,255,65,0.12));
+  width:100%; padding:10px 12px; margin-bottom:8px;
+  background:var(--bg); border:1px solid var(--border);
   border-radius:8px; color:var(--text); font-family:'Cairo',sans-serif;
   font-size:14px; outline:none; transition:0.3s;
 }
-.modal input:focus, .modal textarea:focus { border-color:var(--primary,#00ff41); }
+.modal input:focus, .modal textarea:focus { border-color:var(--primary); }
 .modal textarea { resize:vertical; }
-.modal-row { display:flex; gap:10px; }
+.modal-row { display:flex; gap:8px; }
 .modal-row input { flex:1; }
 @media(max-width:480px) { .modal-row { flex-direction:column; gap:0; } }
 </style>
 
 <script>
-// ===== PRODUCTS =====
 const defaultProducts = [
-  { icon:'👟', nameEn:'Nebula Runner', nameAr:'Nebula Runner', price:129 },
-  { icon:'👟', nameEn:'Lunar Walker', nameAr:'Lunar Walker', price:149 },
-  { icon:'👟', nameEn:'Alien Stomper', nameAr:'Alien Stomper', price:179 },
-  { icon:'👟', nameEn:'Galaxy Glide', nameAr:'Galaxy Glide', price:139 },
-  { icon:'👟', nameEn:'Cosmo Kick', nameAr:'Cosmo Kick', price:159 },
-  { icon:'👟', nameEn:'UFO Drift', nameAr:'UFO Drift', price:199 },
-  { icon:'👟', nameEn:'Mars Walker', nameAr:'Mars Walker', price:169 },
-  { icon:'👟', nameEn:'Saturn Ring', nameAr:'Saturn Ring', price:189 },
-  { icon:'👟', nameEn:'Comet Dash', nameAr:'Comet Dash', price:149 },
+  { nameEn:'Nebula Runner', nameAr:'حذاء نيبولا', price:129, descEn:'Alien propulsion technology', descAr:'تقنية دفع فضائي' },
+  { nameEn:'Lunar Walker', nameAr:'حذاء لونار', price:149, descEn:'Zero-gravity moon boots', descAr:'أحذية قمرية بجاذبية صفرية' },
+  { nameEn:'Alien Stomper', nameAr:'حذاء ألين', price:179, descEn:'Built for asteroid terrain', descAr:'مصمم لتضاريس الكويكبات' },
+  { nameEn:'Galaxy Glide', nameAr:'حذاء جالاكسي', price:139, descEn:'Nebula weave casual', descAr:'كاجوال بنسيج سديمي' },
+  { nameEn:'Cosmo Kick', nameAr:'حذاء كوزمو', price:159, descEn:'Quantum energy return', descAr:'ارتداد طاقة كمي' },
+  { nameEn:'UFO Drift', nameAr:'حذاء يوفو', price:199, descEn:'UFO levitation soles', descAr:'نعال طائرة مرفوعة' },
+  { nameEn:'Mars Walker', nameAr:'حذاء مارس', price:169, descEn:'Mars exploration boots', descAr:'أحذية استكشاف المريخ' },
+  { nameEn:'Saturn Ring', nameAr:'حذاء زحل', price:189, descEn:'Saturn ring cushioning', descAr:'وسادة حلقات زحل' },
+  { nameEn:'Comet Dash', nameAr:'حذاء كوميت', price:149, descEn:'Comet-speed movement', descAr:'سرعة المذنب' },
 ];
-const descs = {
-  en: ['Light-speed with alien propulsion','Zero-gravity moon boots','Built for asteroid terrain','Nebula weave casual','Quantum energy return','UFO levitation soles','Mars exploration boots','Saturn ring cushioning','Comet-speed movement'],
-  ar: ['سرعة الضوء بدفع فضائي','أحذية قمرية جاذبية صفرية','لتضاريس الكويكبات','نسيج سديمي كاجوال','ارتداد طاقة كمي','نعال طائرة UFO','أحذية استكشاف المريخ','وسادة حلقات زحل','سرعة المذنب']
-};
 
 function getProducts() {
   const admin = JSON.parse(localStorage.getItem('a51-products') || '[]');
   if (admin.length > 0) return admin;
   return defaultProducts.map((p, i) => ({
-    id: i,
-    image: null,
-    price: p.price,
-    nameEn: p.nameEn,
-    nameAr: p.nameAr,
-    descEn: descs.en[i],
-    descAr: descs.ar[i],
+    id: i, image: null, price: p.price,
+    nameEn: p.nameEn, nameAr: p.nameAr,
+    descEn: p.descEn, descAr: p.descAr,
     sizes: [40,41,42,43,44]
   }));
 }
 
-let lang = localStorage.getItem('a51-lang') || 'en';
+let lang = localStorage.getItem('a51-lang') || 'ar';
 let cart = JSON.parse(localStorage.getItem('a51-cart') || '[]');
 let qty = {};
 
-const storeT = {
-  en: { backHome:'Home', storeSub:'Galactic footwear collection', cartTitle:'Your Orbit', total:'Total', checkout:'Order via WhatsApp', backHome2:'Back to Home', add:'Add to Orbit', cartEmpty:'Your orbit is empty', notif:'Added to orbit! 🛸', modalTitle:'Shipping Details', modalSub:'Enter your details to complete the order', modalName:'Full Name', modalPhone:'Phone Number', modalCity:'City', modalStreet:'Street / District', modalBuilding:'Building', modalApartment:'Apartment / Floor', modalNotes:'Additional notes (optional)', modalSubmit:'Send Order via WhatsApp' },
-  ar: { backHome:'الرئيسية', storeSub:'مجموعة أحذية مجرية', cartTitle:'مدارك', total:'المجموع', checkout:'اطلب عبر واتساب', backHome2:'العودة للرئيسية', add:'أضف للمدار', cartEmpty:'مدارك فارغ', notif:'تمت الإضافة للمدار! 🛸', modalTitle:'تفاصيل الشحن', modalSub:'أدخل بياناتك لإتمام الطلب', modalName:'الاسم الكامل', modalPhone:'رقم الهاتف', modalCity:'المدينة', modalStreet:'الشارع / المنطقة', modalBuilding:'رقم البناء', modalApartment:'الشقة / الطابق', modalNotes:'ملاحظات إضافية (اختياري)', modalSubmit:'أرسل الطلب عبر واتساب' }
+const tr = {
+  ar: {
+    backHome:'الرئيسية', storeSub:'جميع المنتجات الفضائية', cartTitle:'سلة المشتريات',
+    total:'المجموع', checkout:'اطلب عبر واتساب', backHome2:'العودة للرئيسية',
+    add:'أضف للسلة', cartEmpty:'السلة فارغة', added:'تمت الإضافة!',
+    modalTitle:'بيانات الشحن', modalSub:'أدخل بياناتك لإتمام الطلب', modalBtn:'أرسل الطلب',
+  },
+  en: {
+    backHome:'Home', storeSub:'All galactic products', cartTitle:'Your Cart',
+    total:'Total', checkout:'Order via WhatsApp', backHome2:'Back to Home',
+    add:'Add to Cart', cartEmpty:'Cart is empty', added:'Added!',
+    modalTitle:'Shipping Info', modalSub:'Enter your details to order', modalBtn:'Send Order',
+  }
 };
 
 function applyLang(l) {
   lang = l;
-  const tr = storeT[l];
-  document.getElementById('backHome').textContent = tr.backHome;
-  document.getElementById('storeSub').textContent = tr.storeSub;
-  document.getElementById('cartTitle').textContent = tr.cartTitle;
-  document.getElementById('totalLabel').textContent = tr.total;
-  document.getElementById('checkoutLabel').textContent = tr.checkout;
-  document.getElementById('backHome2').textContent = tr.backHome2;
-  document.getElementById('modalTitle').textContent = tr.modalTitle;
-  document.getElementById('modalSub').textContent = tr.modalSub;
-  document.getElementById('modalSubmit').textContent = tr.modalSubmit;
-  document.getElementById('cf_name').placeholder = tr.modalName;
-  document.getElementById('cf_phone').placeholder = tr.modalPhone;
-  document.getElementById('cf_city').placeholder = tr.modalCity;
-  document.getElementById('cf_street').placeholder = tr.modalStreet;
-  document.getElementById('cf_building').placeholder = tr.modalBuilding;
-  document.getElementById('cf_apartment').placeholder = tr.modalApartment;
-  document.getElementById('cf_notes').placeholder = tr.modalNotes;
+  const d = tr[l];
+  document.getElementById('backHome').textContent = d.backHome;
+  document.getElementById('storeSub').textContent = d.storeSub;
+  document.getElementById('cartTitle').textContent = d.cartTitle;
+  document.getElementById('totalLabel').textContent = d.total;
+  document.getElementById('checkoutLabel').textContent = d.checkout;
+  document.getElementById('backHome2').textContent = d.backHome2;
+  document.getElementById('modalTitle').textContent = d.modalTitle;
+  document.getElementById('modalSub').textContent = d.modalSub;
+  document.getElementById('modalBtn').textContent = d.modalBtn;
   document.getElementById('storeLang').textContent = l === 'en' ? 'AR' : 'EN';
   document.documentElement.lang = l;
   document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
@@ -204,38 +186,42 @@ function applyLang(l) {
   renderCart();
 }
 
-const savedTheme = localStorage.getItem('a51-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+const savedTheme = localStorage.getItem('a51-theme') || (window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');
 document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('storeTheme').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('a51-theme', next);
+  document.getElementById('storeTheme').innerHTML = next === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+});
 
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
   const products = getProducts();
-  const tr = storeT[lang];
-
+  const d = tr[lang];
   grid.innerHTML = products.map((p, i) => {
     const name = lang === 'en' ? p.nameEn : p.nameAr;
     const desc = lang === 'en' ? p.descEn : p.descAr;
-    const sizesHtml = p.sizes.map(s => `<span style="display:inline-block;padding:2px 8px;margin:2px;border-radius:4px;background:rgba(0,255,65,0.06);border:1px solid var(--border);font-size:11px;">${s}</span>`).join('');
-    const imgHtml = p.image
-      ? `<img src="${p.image}" alt="${name}" style="width:100%;height:120px;object-fit:contain;margin-bottom:8px;border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="icon" style="display:none">👟</span>`
+    const sizes = (p.sizes || []).map(s => `<span style="display:inline-block;padding:1px 6px;margin:1px;border-radius:4px;background:rgba(0,255,65,0.05);border:1px solid var(--border);font-size:10px;">${s}</span>`).join('');
+    const img = p.image
+      ? `<img src="${p.image}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="icon" style="display:none">👟</span>`
       : `<span class="icon">👟</span>`;
     qty[i] = qty[i] || 1;
-    return `
-      <div class="product-card">
-        ${imgHtml}
-        <h3>${name}</h3>
-        <p>${desc}</p>
-        <div style="margin-bottom:8px;">${sizesHtml}</div>
-        <div class="price">${lang === 'en' ? '$' : ''}${p.price}${lang === 'ar' ? '$' : ''}</div>
-        <div class="qty-wrap">
-          <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
-          <span class="qty-num" id="qty_${i}">${qty[i]}</span>
-          <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-        </div>
-        <button class="add-btn" onclick="addItem(${i})">${tr.add} <i class="fas fa-shopping-cart"></i></button>
+    return `<div class="product-card">
+      ${img}
+      <h3>${name}</h3>
+      <p>${desc}</p>
+      <div style="margin-bottom:6px;">${sizes}</div>
+      <div class="price">$${p.price}</div>
+      <div class="qty-wrap">
+        <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+        <span class="qty-num" id="qty_${i}">${qty[i]}</span>
+        <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
       </div>
-    `;
+      <button class="add-btn" onclick="addItem(${i})">${d.add} <i class="fas fa-cart-plus"></i></button>
+    </div>`;
   }).join('');
 }
 
@@ -247,10 +233,10 @@ function addItem(i) {
   const name = lang === 'en' ? p.nameEn : p.nameAr;
   const q = qty[i]||1;
   const ex = cart.find(x => x.idx === i);
-  if (ex) ex.qty += q; else cart.push({idx:i, name, price:p.price, icon:'👟', qty:q});
+  if (ex) ex.qty += q; else cart.push({idx:i, name, price:p.price, icon:'👟', qty});
   localStorage.setItem('a51-cart', JSON.stringify(cart));
   qty[i] = 1; const e=document.getElementById('qty_'+i); if(e) e.textContent=1;
-  renderCart(); showNotif(storeT[lang].notif);
+  renderCart();
 }
 
 function removeItem(i) { cart = cart.filter(x => x.idx !== i); localStorage.setItem('a51-cart', JSON.stringify(cart)); renderCart(); }
@@ -259,35 +245,25 @@ function renderCart() {
   const con = document.getElementById('cartItems');
   const te = document.getElementById('cartTotal');
   if (!con) return;
-  const tr = storeT[lang];
-  if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span style="font-size:36px;display:block;margin-bottom:8px;opacity:0.4;">🛸</span>${tr.cartEmpty}</div>`; te.textContent = tr.total + ': $0'; return; }
-  con.innerHTML = cart.map(it => `
-    <div class="cart-item">
+  const d = tr[lang];
+  if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span style="font-size:28px;display:block;margin-bottom:6px;opacity:0.4;">🛸</span>${d.cartEmpty}</div>`; te.textContent = d.total + ': $0'; return; }
+  con.innerHTML = cart.map(it =>
+    `<div class="cart-item">
       <div class="cart-item-info">
-        <span style="font-size:22px;">👟</span>
-        <div><div class="name">${it.name}</div><div class="meta">${lang==='en'?'$':''}${it.price}${lang==='ar'?'$':''} × ${it.qty}</div></div>
+        <span style="font-size:18px;">👟</span>
+        <div><div class="name">${it.name}</div><div class="meta">$${it.price} × ${it.qty}</div></div>
       </div>
       <div>
-        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:8px;">${lang==='en'?'$':''}${it.price*it.qty}${lang==='ar'?'$':''}</span>
+        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">$${it.price*it.qty}</span>
         <button class="remove" onclick="removeItem(${it.idx})"><i class="fas fa-times"></i></button>
       </div>
-    </div>
-  `).join('');
-  const total = cart.reduce((s, it) => s + it.price*it.qty, 0);
-  te.textContent = tr.total + ': ' + (lang==='en'?'$':'') + total + (lang==='ar'?'$':'');
+    </div>`
+  ).join('');
+  te.textContent = d.total + ': $' + cart.reduce((s, it) => s + it.price*it.qty, 0);
 }
 
-function showNotif(msg) {
-  const n = document.getElementById('cartNotif');
-  n.querySelector('span').textContent = msg;
-  n.classList.add('show');
-  clearTimeout(n._t);
-  n._t = setTimeout(() => n.classList.remove('show'), 2000);
-}
-
-// ===== CHECKOUT MODAL =====
 document.getElementById('checkoutBtn').addEventListener('click', function() {
-  if (!cart.length) { alert(lang === 'en' ? 'Your orbit is empty!' : 'مدارك فارغ!'); return; }
+  if (!cart.length) { alert(tr[lang].cartEmpty); return; }
   document.getElementById('checkoutModal').classList.add('open');
 });
 
@@ -302,70 +278,37 @@ function submitCheckout(e) {
   const building = document.getElementById('cf_building').value.trim();
   const apartment = document.getElementById('cf_apartment').value.trim();
   const notes = document.getElementById('cf_notes').value.trim();
+  if (!name || !phone || !city || !street) { alert(lang==='en'?'Fill required fields':'املأ الحقول المطلوبة'); return; }
 
-  if (!name || !phone || !city || !street) {
-    alert(lang === 'en' ? 'Please fill all required fields' : 'يرجى ملء جميع الحقول المطلوبة');
-    return;
-  }
+  let msg = lang==='en'
+    ? `🛸 *NEW ORDER*\n═══════════════\n\n👤 *Name:* ${name}\n📞 *Phone:* ${phone}\n📍 *City:* ${city}\n🏠 *Street:* ${street}`
+    : `🛸 *طلب جديد*\n═══════════════\n\n👤 *الاسم:* ${name}\n📞 *الهاتف:* ${phone}\n📍 *المدينة:* ${city}\n🏠 *الشارع:* ${street}`;
+  if (building) msg += `\n🏢 ${lang==='en'?'Building':'البناء'}: ${building}`;
+  if (apartment) msg += `\n🚪 ${lang==='en'?'Apartment':'الشقة'}: ${apartment}`;
+  msg += lang==='en' ? '\n\n👟 *Order:*' : '\n\n👟 *الطلب:*';
+  cart.forEach(it => { msg += `\n• 👟 ${it.name} × ${it.qty} = $${it.price*it.qty}`; });
+  const total = cart.reduce((s,it) => s+it.price*it.qty, 0);
+  msg += lang==='en' ? `\n═══════════════\n*Total: $${total}*` : `\n═══════════════\n*المجموع: ${total}$*`;
+  if (notes) msg += lang==='en' ? `\n\n📝 *Notes:* ${notes}` : `\n\n📝 *ملاحظات:* ${notes}`;
+  msg += lang==='en' ? '\n\n👽 Thank you!' : '\n\n👽 شكرًا لتسوقك مع Area 51!';
 
-  let msg = lang === 'en'
-    ? '🛸 *NEW ORDER — AREA 51*\n═══════════════════\n'
-    : '🛸 *طلب جديد — Area 51*\n═══════════════════\n';
-
-  msg += lang === 'en' ? '\n👤 *Customer Info*' : '\n👤 *معلومات العميل*';
-  msg += `\n• ${lang === 'en' ? 'Name' : 'الاسم'}: ${name}`;
-  msg += `\n• ${lang === 'en' ? 'Phone' : 'الهاتف'}: ${phone}`;
-
-  msg += lang === 'en' ? '\n\n📍 *Shipping Address*' : '\n\n📍 *عنوان الشحن*';
-  msg += `\n• ${lang === 'en' ? 'City' : 'المدينة'}: ${city}`;
-  msg += `\n• ${lang === 'en' ? 'Street' : 'الشارع'}: ${street}`;
-  if (building) msg += `\n• ${lang === 'en' ? 'Building' : 'البناء'}: ${building}`;
-  if (apartment) msg += `\n• ${lang === 'en' ? 'Apartment' : 'الشقة'}: ${apartment}`;
-
-  msg += lang === 'en' ? '\n\n👟 *Order Details*' : '\n\n👟 *تفاصيل الطلب*';
-  cart.forEach(item => {
-    msg += `\n• 👟 ${item.name} × ${item.qty} = ` + (lang==='en'?'$':'') + (item.price * item.qty) + (lang==='ar'?'$':'');
-  });
-  const total = cart.reduce((s, it) => s + it.price*it.qty, 0);
-  msg += lang === 'en'
-    ? `\n═══════════════════\n*Total: $${total}*`
-    : `\n═══════════════════\n*المجموع: ${total}$*`;
-  if (notes) msg += lang === 'en' ? `\n\n📝 *Notes*: ${notes}` : `\n\n📝 *ملاحظات*: ${notes}`;
-  msg += lang === 'en' ? '\n\n👽 Thank you for shopping with Area 51!' : '\n\n👽 شكرًا لتسوقك مع Area 51!';
-
-  const url = 'https://wa.me/9647764762005?text=' + encodeURIComponent(msg);
-  window.open(url, '_blank');
-
-  cart = [];
-  localStorage.setItem('a51-cart', JSON.stringify(cart));
-  renderCart();
-  closeCheckout();
-  document.getElementById('checkoutForm').reset();
+  window.open('https://wa.me/9647764762005?text='+encodeURIComponent(msg), '_blank');
+  cart = []; localStorage.setItem('a51-cart', JSON.stringify(cart));
+  renderCart(); closeCheckout(); document.getElementById('checkoutForm').reset();
 }
 
 document.getElementById('storeLang').addEventListener('click', () => applyLang(lang === 'en' ? 'ar' : 'en'));
+applyLang(localStorage.getItem('a51-lang') || 'ar');
 
-document.getElementById('storeTheme').addEventListener('click', () => {
-  const cur = document.documentElement.getAttribute('data-theme');
-  const next = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('a51-theme', next);
-  document.getElementById('storeTheme').innerHTML = next === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-});
-
-applyLang(localStorage.getItem('a51-lang') || 'en');
-
-// Page transition
-document.querySelectorAll('a[href$=".html"],a[href="/"],a[href="/index.html"]').forEach(link => {
+document.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', e => {
     const href = link.getAttribute('href');
-    if (!href || href === '#') return;
+    if (!href || href === '#' || href.startsWith('#')) return;
+    if (href.includes('http')) return;
     e.preventDefault();
-    document.getElementById('pageTransition').classList.add('active');
-    setTimeout(() => { window.location.href = href; }, 300);
+    window.location.href = href;
   });
 });
-window.addEventListener('pageshow', () => document.getElementById('pageTransition').classList.remove('active'));
 </script>
 </body>
 </html>
