@@ -162,7 +162,7 @@ const defaultProducts = [
   { nameEn:'Comet Dash', nameAr:'حذاء كوميت', price:149000, descEn:'Comet-speed movement', descAr:'سرعة المذنب' },
 ];
 
-function fmt(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' IQD'; }
+function fmt(p) { try { return Number(p).toLocaleString() + ' IQD'; } catch(e) { return '0 IQD'; } }
 
 function getProducts() {
   const admin = JSON.parse(localStorage.getItem('a51-products') || '[]');
@@ -273,24 +273,26 @@ function addItem(i) {
 function removeItem(i) { cart = cart.filter(x => x.idx !== i); localStorage.setItem('a51-cart', JSON.stringify(cart)); renderCart(); }
 
 function renderCart() {
-  const con = document.getElementById('cartItems');
-  const te = document.getElementById('cartTotal');
-  if (!con) return;
-  const d = tr[lang];
-  if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span style="font-size:28px;display:block;margin-bottom:6px;opacity:0.4;">🛸</span>${d.cartEmpty}</div>`; te.textContent = d.total + ': 0 IQD'; return; }
-  con.innerHTML = cart.map(it =>
-    `<div class="cart-item">
-      <div class="cart-item-info">
-        <span style="font-size:18px;">👟</span>
-        <div><div class="name">${it.name}</div><div class="meta">${fmt(it.price)} × ${it.qty}</div></div>
-      </div>
-      <div>
-        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">${fmt(it.price*it.qty)}</span>
-        <button class="remove" onclick="removeItem(${it.idx})"><i class="fas fa-times"></i></button>
-      </div>
-    </div>`
-  ).join('');
-  te.textContent = d.total + ': ' + fmt(cart.reduce((s, it) => s + it.price*it.qty, 0));
+  try {
+    const con = document.getElementById('cartItems');
+    const te = document.getElementById('cartTotal');
+    if (!con || !te) return;
+    const d = tr[lang];
+    if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span style="font-size:28px;display:block;margin-bottom:6px;opacity:0.4;">🛸</span>${d.cartEmpty}</div>`; te.textContent = d.total + ': 0 IQD'; return; }
+    con.innerHTML = cart.map(it =>
+      `<div class="cart-item">
+        <div class="cart-item-info">
+          <span style="font-size:18px;">👟</span>
+          <div><div class="name">${it.name}</div><div class="meta">${fmt(it.price)} × ${it.qty}</div></div>
+        </div>
+        <div>
+          <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">${fmt(it.price*it.qty)}</span>
+          <button class="remove" onclick="removeItem(${it.idx})"><i class="fas fa-times"></i></button>
+        </div>
+      </div>`
+    ).join('');
+    te.textContent = d.total + ': ' + fmt(cart.reduce((s, it) => s + it.price*it.qty, 0));
+  } catch(e) { console.error(e); }
 }
 
 let prodIdx = 0;

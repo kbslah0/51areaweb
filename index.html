@@ -162,7 +162,7 @@ const defaultProducts = [
   { icon:'👟', nameEn:'UFO Drift', nameAr:'حذاء يوفو', price:199000, descEn:'UFO levitation soles', descAr:'نعال طائرة مرفوعة' },
 ];
 
-function fmt(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' IQD'; }
+function fmt(p) { try { return Number(p).toLocaleString() + ' IQD'; } catch(e) { return '0 IQD'; } }
 
 function getProducts() {
   const admin = JSON.parse(localStorage.getItem('a51-products') || '[]');
@@ -313,23 +313,25 @@ function addToCart(i) {
 function removeFromCart(i) { cart = cart.filter(x => x.idx !== i); localStorage.setItem('a51-cart', JSON.stringify(cart)); renderCart(); }
 
 function renderCart() {
-  const con = document.getElementById('cartItems');
-  const te = document.getElementById('cartTotal');
-  if (!con) return;
-  if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span class="icon">🛸</span>${t[lang].cart_empty}</div>`; te.textContent = t[lang].total + ': 0 IQD'; return; }
-  con.innerHTML = cart.map(it =>
-    `<div class="cart-item">
-      <div class="cart-item-info">
-        <span style="font-size:18px;">👟</span>
-        <div><div class="name">${it.name}</div><div class="meta">${fmt(it.price)} × ${it.qty}</div></div>
-      </div>
-      <div>
-        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">${fmt(it.price*it.qty)}</span>
-        <button class="remove" onclick="removeFromCart(${it.idx})"><i class="fas fa-times"></i></button>
-      </div>
-    </div>`
-  ).join('');
-  te.textContent = t[lang].total + ': ' + fmt(cart.reduce((s, it) => s + it.price*it.qty, 0));
+  try {
+    const con = document.getElementById('cartItems');
+    const te = document.getElementById('cartTotal');
+    if (!con || !te) return;
+    if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span class="icon">🛸</span>${t[lang].cart_empty}</div>`; te.textContent = t[lang].total + ': 0 IQD'; return; }
+    con.innerHTML = cart.map(it =>
+      `<div class="cart-item">
+        <div class="cart-item-info">
+          <span style="font-size:18px;">👟</span>
+          <div><div class="name">${it.name}</div><div class="meta">${fmt(it.price)} × ${it.qty}</div></div>
+        </div>
+        <div>
+          <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">${fmt(it.price*it.qty)}</span>
+          <button class="remove" onclick="removeFromCart(${it.idx})"><i class="fas fa-times"></i></button>
+        </div>
+      </div>`
+    ).join('');
+    te.textContent = t[lang].total + ': ' + fmt(cart.reduce((s, it) => s + it.price*it.qty, 0));
+  } catch(e) { console.error(e); }
 }
 
 document.getElementById('checkoutBtn').addEventListener('click', function() {
