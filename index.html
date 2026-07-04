@@ -46,7 +46,7 @@
     <div class="cart-box" id="cartBox">
       <h2><span data-i18n="cart_title">سلة المشتريات</span></h2>
       <div id="cartItems"></div>
-      <div class="cart-total" id="cartTotal"><span data-i18n="total">المجموع</span>: $0</div>
+      <div class="cart-total" id="cartTotal"><span data-i18n="total">المجموع</span>: 0 IQD</div>
       <button class="whatsapp-btn" id="checkoutBtn">
         <i class="fab fa-whatsapp"></i> <span data-i18n="checkout">اطلب عبر واتساب</span>
       </button>
@@ -116,7 +116,6 @@
 .product-modal .prod-sizes { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin:8px 0; }
 .product-modal .prod-sizes span { padding:4px 12px; border-radius:6px; background:rgba(0,255,65,0.06); border:1px solid var(--border); font-size:13px; }
 .product-modal .prod-label { font-size:11px; color:var(--text-muted); margin-bottom:4px; }
-
 .modal-overlay {
   position:fixed; inset:0; z-index:9999;
   background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
@@ -153,13 +152,15 @@
 
 <script>
 const defaultProducts = [
-  { icon:'👟', nameEn:'Nebula Runner', nameAr:'حذاء نيبولا', price:129, descEn:'Alien propulsion technology', descAr:'تقنية دفع فضائي' },
-  { icon:'👟', nameEn:'Lunar Walker', nameAr:'حذاء لونار', price:149, descEn:'Zero-gravity moon boots', descAr:'أحذية قمرية بجاذبية صفرية' },
-  { icon:'👟', nameEn:'Alien Stomper', nameAr:'حذاء ألين', price:179, descEn:'Built for asteroid terrain', descAr:'مصمم لتضاريس الكويكبات' },
-  { icon:'👟', nameEn:'Galaxy Glide', nameAr:'حذاء جالاكسي', price:139, descEn:'Nebula weave casual', descAr:'كاجوال بنسيج سديمي' },
-  { icon:'👟', nameEn:'Cosmo Kick', nameAr:'حذاء كوزمو', price:159, descEn:'Quantum energy return', descAr:'ارتداد طاقة كمي' },
-  { icon:'👟', nameEn:'UFO Drift', nameAr:'حذاء يوفو', price:199, descEn:'UFO levitation soles', descAr:'نعال طائرة مرفوعة' },
+  { icon:'👟', nameEn:'Nebula Runner', nameAr:'حذاء نيبولا', price:129000, descEn:'Alien propulsion technology', descAr:'تقنية دفع فضائي' },
+  { icon:'👟', nameEn:'Lunar Walker', nameAr:'حذاء لونار', price:149000, descEn:'Zero-gravity moon boots', descAr:'أحذية قمرية بجاذبية صفرية' },
+  { icon:'👟', nameEn:'Alien Stomper', nameAr:'حذاء ألين', price:179000, descEn:'Built for asteroid terrain', descAr:'مصمم لتضاريس الكويكبات' },
+  { icon:'👟', nameEn:'Galaxy Glide', nameAr:'حذاء جالاكسي', price:139000, descEn:'Nebula weave casual', descAr:'كاجوال بنسيج سديمي' },
+  { icon:'👟', nameEn:'Cosmo Kick', nameAr:'حذاء كوزمو', price:159000, descEn:'Quantum energy return', descAr:'ارتداد طاقة كمي' },
+  { icon:'👟', nameEn:'UFO Drift', nameAr:'حذاء يوفو', price:199000, descEn:'UFO levitation soles', descAr:'نعال طائرة مرفوعة' },
 ];
+
+function fmt(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' IQD'; }
 
 function getProducts() {
   const admin = JSON.parse(localStorage.getItem('a51-products') || '[]');
@@ -249,7 +250,7 @@ function renderProducts() {
       <h3>${name}</h3>
       <p>${desc}</p>
       <div style="margin-bottom:6px;">${sizes}</div>
-      <div class="price">$${p.price}</div>
+      <div class="price">${fmt(p.price)}</div>
       <div class="qty-wrap" onclick="event.stopPropagation()">
         <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
         <span class="qty-num" id="qty_${i}">${qty[i]}</span>
@@ -272,7 +273,7 @@ function openProduct(i) {
     : `<span style="font-size:72px">👟</span>`;
   document.getElementById('prodName').textContent = name;
   document.getElementById('prodDesc').textContent = desc;
-  document.getElementById('prodPrice').textContent = '$' + p.price;
+  document.getElementById('prodPrice').textContent = fmt(p.price);
   document.getElementById('prodSizes').innerHTML = (p.sizes||[]).map(s => `<span>${s}</span>`).join('');
   document.getElementById('prodQty').textContent = 1;
   document.getElementById('productModal').classList.add('open');
@@ -313,20 +314,20 @@ function renderCart() {
   const con = document.getElementById('cartItems');
   const te = document.getElementById('cartTotal');
   if (!con) return;
-  if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span class="icon">🛸</span>${t[lang].cart_empty}</div>`; te.textContent = t[lang].total + ': $0'; return; }
+  if (!cart.length) { con.innerHTML = `<div class="cart-empty"><span class="icon">🛸</span>${t[lang].cart_empty}</div>`; te.textContent = t[lang].total + ': 0 IQD'; return; }
   con.innerHTML = cart.map(it =>
     `<div class="cart-item">
       <div class="cart-item-info">
         <span style="font-size:18px;">👟</span>
-        <div><div class="name">${it.name}</div><div class="meta">$${it.price} × ${it.qty}</div></div>
+        <div><div class="name">${it.name}</div><div class="meta">${fmt(it.price)} × ${it.qty}</div></div>
       </div>
       <div>
-        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">$${it.price*it.qty}</span>
+        <span style="font-family:'Teko',sans-serif;font-weight:700;color:var(--primary);margin-left:6px;">${fmt(it.price*it.qty)}</span>
         <button class="remove" onclick="removeFromCart(${it.idx})"><i class="fas fa-times"></i></button>
       </div>
     </div>`
   ).join('');
-  te.textContent = t[lang].total + ': $' + cart.reduce((s, it) => s + it.price*it.qty, 0);
+  te.textContent = t[lang].total + ': ' + fmt(cart.reduce((s, it) => s + it.price*it.qty, 0));
 }
 
 document.getElementById('checkoutBtn').addEventListener('click', function() {
@@ -353,9 +354,9 @@ function submitCheckout(e) {
   if (building) msg += `\n🏢 ${lang==='en'?'Building':'البناء'}: ${building}`;
   if (apartment) msg += `\n🚪 ${lang==='en'?'Apartment':'الشقة'}: ${apartment}`;
   msg += lang==='en' ? '\n\n👟 *Order:*' : '\n\n👟 *الطلب:*';
-  cart.forEach(it => { msg += `\n• 👟 ${it.name} × ${it.qty} = $${it.price*it.qty}`; });
+  cart.forEach(it => { msg += `\n• 👟 ${it.name} × ${it.qty} = ${fmt(it.price*it.qty)}`; });
   const total = cart.reduce((s,it) => s+it.price*it.qty, 0);
-  msg += lang==='en' ? `\n═══════════════\n*Total: $${total}*` : `\n═══════════════\n*المجموع: ${total}$*`;
+  msg += lang==='en' ? `\n═══════════════\n*Total: ${fmt(total)}*` : `\n═══════════════\n*المجموع: ${fmt(total)}*`;
   if (notes) msg += lang==='en' ? `\n\n📝 *Notes:* ${notes}` : `\n\n📝 *ملاحظات:* ${notes}`;
   msg += lang==='en' ? '\n\n👽 Thank you!' : '\n\n👽 شكرًا لتسوقك مع Area 51!';
 
