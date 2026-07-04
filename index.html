@@ -34,7 +34,7 @@
   <p class="desc" data-i18n="hero_desc">Walk on the moon — literally.</p>
   <div class="hero-actions">
     <a href="#products" class="btn btn-primary"><span data-i18n="hero_btn">تسوق الآن</span></a>
-    <a href="#products" class="btn btn-outline"><span data-i18n="hero_admin">جميع المنتجات</span></a>
+    <a href="#products" class="btn btn-outline">جميع المنتجات</a>
   </div>
 </section>
 
@@ -152,7 +152,7 @@ const t = {
   ar: {
     nav_products:'الأحذية', nav_store:'المتجر',
     hero_sub:'أحذية من مجرة أخرى', hero_desc:'امشِ على القمر — حرفيًا',
-    hero_btn:'تسوق الآن', hero_admin:'إدارة',
+    hero_btn:'تسوق الآن',
     sec_title:'المنتجات الفضائية', sec_sub:'أحذية بتقنية خارج الأرض',
     cart_title:'سلة المشتريات', total:'المجموع', checkout:'اطلب عبر واتساب',
     add:'أضف للسلة', cart_empty:'السلة فارغة', added:'تمت الإضافة!',
@@ -165,7 +165,7 @@ const t = {
   en: {
     nav_products:'Shoes', nav_store:'Store',
     hero_sub:'Shoes From Another Galaxy', hero_desc:'Walk on the moon — literally.',
-    hero_btn:'Shop Now', hero_admin:'Admin',
+    hero_btn:'Shop Now',
     sec_title:'Galactic Products', sec_sub:'Alien technology footwear',
     cart_title:'Your Cart', total:'Total', checkout:'Order via WhatsApp',
     add:'Add to Cart', cart_empty:'Cart is empty', added:'Added!',
@@ -308,7 +308,7 @@ function submitCheckout(e) {
 document.getElementById('langToggle').addEventListener('click', () => applyLang(lang === 'en' ? 'ar' : 'en'));
 applyLang(localStorage.getItem('a51-lang') || 'ar');
 
-document.querySelectorAll('a[href$=".html"],a[href="/products"],a[href="/admin"]').forEach(link => {
+document.querySelectorAll('a[href$=".html"],a[href="/products"]').forEach(link => {
   link.addEventListener('click', e => {
     const href = link.getAttribute('href');
     if (!href || href === '#') return;
