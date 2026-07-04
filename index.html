@@ -103,7 +103,7 @@
   <div class="footer-links">
     <a href="#products" data-i18n="nav_products">الأحذية</a>
     <a href="/products" data-i18n="nav_store">المتجر</a>
-    <a href="https://wa.me/9647764762005">WhatsApp</a>
+    <a href="https://wa.me/9647705005060">WhatsApp</a>
   </div>
   <div class="copy" data-i18n="footer_copy">© 2047 Area 51</div>
 </footer>
@@ -364,7 +364,7 @@ function submitCheckout(e) {
   if (notes) msg += lang==='en' ? `\n\n📝 *Notes:* ${notes}` : `\n\n📝 *ملاحظات:* ${notes}`;
   msg += lang==='en' ? '\n\n👽 Thank you!' : '\n\n👽 شكرًا لتسوقك مع Area 51!';
 
-  window.open('https://wa.me/9647764762005?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/9647705005060?text='+encodeURIComponent(msg), '_blank');
   cart = []; localStorage.setItem('a51-cart', JSON.stringify(cart));
   renderCart(); closeCheckout(); document.getElementById('checkoutForm').reset();
 }
