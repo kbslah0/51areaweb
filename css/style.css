@@ -202,6 +202,19 @@ body.ltr { direction:ltr; }
 .footer-links a:hover { color:var(--primary); }
 .footer .copy { font-size:11px; color:var(--text-muted); opacity:0.6; border-top:1px solid var(--border); padding-top:12px; margin-top:12px; }
 
+.cart-notif {
+  position:fixed; bottom:20px; right:20px;
+  background:var(--card); border:1px solid var(--primary);
+  border-radius:8px; padding:10px 16px;
+  display:flex; align-items:center; gap:8px; z-index:9999;
+  box-shadow:0 8px 30px rgba(0,0,0,0.3);
+  transform:translateY(80px); opacity:0;
+  transition:all 0.3s;
+  font-size:13px;
+}
+.cart-notif.show { transform:translateY(0); opacity:1; }
+.cart-notif i { color:var(--primary); }
+
 @media (max-width:600px) {
   .products-grid { grid-template-columns:repeat(2,1fr); }
   .nav-links { gap:2px; }
